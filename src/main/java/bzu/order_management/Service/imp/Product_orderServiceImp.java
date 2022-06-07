@@ -9,6 +9,7 @@ import bzu.order_management.Reposetory.OrderRepository;
 import bzu.order_management.Reposetory.ProductRepository;
 import bzu.order_management.Reposetory.Product_orderRepository;
 import bzu.order_management.Service.Product_orderService;
+import bzu.order_management.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,8 @@ public class Product_orderServiceImp implements Product_orderService {
     @Override
     public Product_orderDto createProduct_Order(Product_orderDto product_orderDto, Integer productId, Integer orderId) {
         Product_order product_order = mapToEntity(product_orderDto);
-        Product product = productRepository.findById(productId).orElseThrow();
-        Order order = orderRepository.findById(orderId).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
         product_order.setProductId(product);
         product_order.setOrderId(order);
 
@@ -48,8 +49,8 @@ public class Product_orderServiceImp implements Product_orderService {
 
     @Override
     public Product_orderDto getProduct_OrderById(Integer productId,Integer orderId) {
-        Product product = productRepository.findById(productId).orElseThrow();
-        Order order = orderRepository.findById(orderId).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
         Product_orderPK product_orderPK = new Product_orderPK(product,order);
         Product_order product_order = product_orderRepository.findById(product_orderPK).orElseThrow();
         return mapToDto(product_order);
@@ -57,8 +58,8 @@ public class Product_orderServiceImp implements Product_orderService {
 
     @Override
     public Product_orderDto updateProduct_Order(Integer productId,Integer orderId, Product_orderDto product_orderDto) {
-        Product product = productRepository.findById(productId).orElseThrow();
-        Order order = orderRepository.findById(orderId).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
         Product_orderPK product_orderPK = new Product_orderPK(product,order);
         Product_order product_order = product_orderRepository.findById(product_orderPK).orElseThrow();
         product_order.setVat(product_orderDto.getVat());
@@ -69,8 +70,8 @@ public class Product_orderServiceImp implements Product_orderService {
 
     @Override
     public void deleteProduct_Order(Integer productId,Integer orderId) {
-        Product product = productRepository.findById(productId).orElseThrow();
-        Order order = orderRepository.findById(orderId).orElseThrow();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
         Product_orderPK product_orderPK = new Product_orderPK(product,order);
         Product_order product_order = product_orderRepository.findById(product_orderPK).orElseThrow();
         product_orderRepository.delete(product_order);

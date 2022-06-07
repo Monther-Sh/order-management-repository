@@ -7,6 +7,7 @@ import bzu.order_management.Entity.Order;
 import bzu.order_management.Reposetory.CustomerRepository;
 import bzu.order_management.Reposetory.OrderRepository;
 import bzu.order_management.Service.OrderService;
+import bzu.order_management.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class OrderServiceImp implements OrderService {
     @Override
     public OrderDto createOrder(OrderDto orderDto, Integer customerId) {
         Order order = mapToEntity(orderDto);
-        Customer customer = customerRepository.findById(customerId).orElseThrow();
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", customerId));
         order.setCustomerId(customer);
 
         Order order1 =  orderRepository.save(order);
@@ -46,13 +47,13 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     public OrderDto getOrderById(Integer id) {
-        Order order = orderRepository.findById(id).orElseThrow();
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
         return mapToDto(order);
     }
 
     @Override
     public OrderDto updateOrder(Integer id, OrderDto orderDto) {
-        Order order = orderRepository.findById(id).orElseThrow();
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
         order.setOrderedAt(orderDto.getOrderedAt());
        //order.setProduct_order(orderDto.getProduct_order());
 
@@ -62,7 +63,7 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     public void deleteOrder(Integer id) {
-        Order order = orderRepository.findById(id).orElseThrow();
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order", "id", id));
         orderRepository.delete(order);
     }
 

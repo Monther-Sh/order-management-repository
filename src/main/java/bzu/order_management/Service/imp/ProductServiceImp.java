@@ -4,6 +4,7 @@ import bzu.order_management.DTO.ProductDto;
 import bzu.order_management.Entity.Product;
 import bzu.order_management.Reposetory.ProductRepository;
 import bzu.order_management.Service.ProductService;
+import bzu.order_management.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +34,13 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public ProductDto getProductById(Integer id) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
         return mapToDto(product);
     }
 
     @Override
     public ProductDto updateProduct(Integer id, ProductDto productDto) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
 
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
@@ -56,7 +57,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void deleteProduct(Integer id) {
-        Product product = productRepository.findById(id).orElseThrow();
+        Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
         productRepository.delete(product);
     }
     private ProductDto mapToDto(Product product){

@@ -4,6 +4,7 @@ import bzu.order_management.DTO.CustomerDto;
 import bzu.order_management.Entity.Customer;
 import bzu.order_management.Reposetory.CustomerRepository;
 import bzu.order_management.Service.CustomerService;
+import bzu.order_management.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,13 +33,13 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public CustomerDto getCustomerById(Integer id) {
-        Customer customer = customerRepository.findById(id).orElseThrow();
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
         return mapToDto(customer);
     }
 
     @Override
     public CustomerDto updateCustomer(Integer id, CustomerDto customerDto) {
-        Customer customer = customerRepository.findById(id).orElseThrow();
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setBornAt(customerDto.getBornAt());
@@ -50,7 +51,7 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public void deleteCustomer(Integer id) {
-        Customer customer=customerRepository.findById(id).orElseThrow();
+        Customer customer=customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
         customerRepository.delete(customer);
     }
 
