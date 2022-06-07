@@ -5,7 +5,7 @@ services:
       image: mysql:8
       container_name: mysql
       environment:
-        - "MYSQL_DATABASE=bzu"
+        - "MYSQL_DATABASE=orderManagement"
         - "MYSQL_USER=user"
         - "MYSQL_PASSWORD=root"
         - "MYSQL_ROOT_PASSWORD=root"
@@ -19,10 +19,10 @@ services:
     depends_on:
       - mysql
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/bzu?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3307/orderManagement?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - SERVER_PORT=9091
+      - SERVER_PORT=9090
     ports:
       - "127.0.0.1:9092:9091"
